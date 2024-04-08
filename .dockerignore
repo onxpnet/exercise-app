@@ -1,0 +1,5 @@
+node_modules/
+.github/
+.gitlab-ci.yml
+sonar-project.properties
+Dockerfile

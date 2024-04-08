@@ -1,0 +1,75 @@
+# Setup these variables first
+# - DOCKER_USERNAME
+# - DOCKER_PASSWORD
+# - DOCKER_REGISTRY
+# - DISCORD_WEBHOOK_ID
+# - DISCORD_WEBHOOK_TOKEN
+
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+- name: build-latest
+  image: plugins/kaniko
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    registry:
+      from_secret: DOCKER_REGISTRY
+    repo: registry.bootcamp.onxp.net/onxp/exercise-app
+    tags: latest
+  when:
+    branch: 
+    - develop
+
+# Build by tag
+# Need to install Drone Cli first
+# Install the Drone CLI
+# curl -L https://github.com/drone/drone-cli/releases/latest/download/drone_linux_amd64.tar.gz | tar zx
+# sudo install -t /usr/local/bin drone
+
+# Authenticate the Drone CLI
+# export DRONE_SERVER=https://drone.bootcamp.onxp.net
+# export DRONE_TOKEN=your-drone-token
+# to build: drone build promote OWNER/REPO BUILD_NUMBER YOUR_TAG_NAME
+# example: drone build promote onxpnet/homepage 1 1.0.0 
+- name: build-latest
+  image: plugins/kaniko
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    registry:
+      from_secret: DOCKER_REGISTRY
+    repo: registry.bootcamp.onxp.net/onxp/exercise-app
+    tags: ${DRONE_TAG}
+  when:
+    event:
+    - promote
+
+- name: notification
+  image: appleboy/drone-discord
+  settings:
+    webhook_id: 
+      from_secret: DISCORD_WEBHOOK_ID
+    webhook_token:
+      from_secret: DISCORD_WEBHOOK_TOKEN
+    username: DroneCI
+    avatar_url: https://cdn.discordapp.com/attachments/892612412014997557/1226805651158601748/Microsoft.png?ex=66261acc&is=6613a5cc&hm=9e2b807b5f8fdc9b44c09f4fdcf6b6f969bbcdbb79c495bf3e5df5b41973bd48&
+    message: >
+      {{#success build.status}}
+        Build **homepage** is *done*. Check on https://drone.bootcamp.onxp.net/onxpnet/homepage/{{build.number}} for more details.
+      {{else}}
+        Build **homepage** is *failed*. Check on https://drone.bootcamp.onxp.net/onxpnet/homepage/{{build.number}} for more details.
+      {{/success}}
+
+trigger:
+  branch:
+  - develop
+  event:
+  - push
+  - promote
