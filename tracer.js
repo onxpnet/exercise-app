@@ -28,7 +28,7 @@ const exporter = new OTLPTraceExporter({
 const provider = new BasicTracerProvider({
     resource: new Resource({
         [SemanticResourceAttributes.SERVICE_NAME]:
-            "pmp-be",
+            "onxp-exercise-app",
     }),
 });
 
