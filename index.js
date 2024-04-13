@@ -13,7 +13,7 @@ app.all("/", (req, res) => {
 });
 
 app.all("/version", (req, res) => {
-   res.json({ method: req.method, message: "On Version v1.0.2", ...req.body });
+   res.json({ method: req.method, message: "On Version latest", ...req.body });
 });
 
 app.get('/intensive', (req, res) => {
