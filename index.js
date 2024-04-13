@@ -12,6 +12,10 @@ app.all("/", (req, res) => {
    res.json({ method: req.method, message: "Hello OnXP", ...req.body });
 });
 
+app.all("/version", (req, res) => {
+   res.json({ method: req.method, message: "On Version v1.0.2", ...req.body });
+});
+
 app.get('/intensive', (req, res) => {
    // Call the CPU-intensive task function
    cpuIntensiveTask((result) => {
