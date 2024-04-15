@@ -25,6 +25,22 @@ steps:
     branch: 
     - develop
 
+- name: build-jsdocs
+  image: plugins/kaniko
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    registry:
+      from_secret: DOCKER_REGISTRY
+    repo: registry.bootcamp.onxp.net/onxp/exercise-app-docs
+    tags: latest
+    dockerfile: Dockerfile.docs
+  when:
+    branch: 
+    - develop
+
 # Build by tag
 # Need to install Drone Cli first
 # Install the Drone CLI

@@ -60,6 +60,15 @@ run:test:
     - main
     - merge_requests
 
+generate:docs:
+  stage: build
+  image: node:20.9.0-bullseye-slim
+  script:
+    - npm install -g jsdoc
+    - jsdoc .
+  only:
+    - main
+
 # Must setup this 2 variables below on GitLab CI/CD Variables
 # SONAR_TOKEN
 # SONAR_HOST_URL

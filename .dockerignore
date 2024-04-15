@@ -3,3 +3,5 @@ node_modules/
 .gitlab-ci.yml
 sonar-project.properties
 Dockerfile
+Dockerfile.docs
+out/

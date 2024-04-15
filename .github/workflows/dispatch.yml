@@ -42,7 +42,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: glendmaatita/own-your-stack:${{ github.event.client_payload.tag }}
+          tags: glendmaatita/exercise-app:${{ github.event.client_payload.tag }}
   
   # More info: https://github.com/marketplace/actions/aqua-security-trivy
   verify:

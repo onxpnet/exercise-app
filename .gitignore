@@ -2,3 +2,5 @@ node_modules/
 .env
 logs/
 dump.rdb
+out/
+.DS_Store
