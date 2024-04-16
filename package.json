@@ -10,7 +10,7 @@
   "keywords": [
     "backend"
   ],
-  "author": "onxp",
+  "author": "glend",
   "license": "Proprietary",
   "dependencies": {
     "@opentelemetry/api": "1.7.0",

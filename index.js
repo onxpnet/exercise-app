@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 
 app.all("/", (req, res) => {
-  res.json({ method: req.method, message: "Hello OnXP", ...req.body });
+  res.json({ method: req.method, message: "Hello Exercise App", ...req.body });
 });
 
 app.all("/version", (req, res) => {

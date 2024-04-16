@@ -22,13 +22,13 @@ const {
 
 
 const exporter = new OTLPTraceExporter({
-    url: process.env.OTEL_URL || "https://ot-collector.ops.onxp.net/v1/traces"
+    url: process.env.OTEL_URL || "https://ot-collector.ops.example.com/v1/traces"
 });
 
 const provider = new BasicTracerProvider({
     resource: new Resource({
         [SemanticResourceAttributes.SERVICE_NAME]:
-            "onxp-exercise-app",
+            "exercise-app",
     }),
 });
 
