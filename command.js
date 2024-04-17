@@ -36,5 +36,6 @@ function isPrime(num) {
   return num > 1;
 }
 
-exports.calculatePrimeNumbers = calculatePrimeNumbers;
-exports.isPrime = isPrime;
+module.exports = {
+  cpuIntensiveTask
+};

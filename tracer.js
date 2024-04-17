@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
     return;
 }
 
+// Tracing with Jaeger
 const {
     BasicTracerProvider,
     ConsoleSpanExporter,
