@@ -29,12 +29,12 @@ Sentry.init({
 });
 
 app.use((req, res, next) => {
+  console.log("Catch all requests");
+
   const start = process.hrtime.bigint(); 
 
-  // separate counter for each route
+  // record to prometheus
   reqCounter.add(1, { method: req.method, route: req.route });
-
-  // count all requests
   reqCounter.add(1, { route: 'all' });
 
   // send log to Loki
@@ -45,6 +45,7 @@ app.use((req, res, next) => {
   });
 
   res.on('finish', () => {
+    console.log("Finish request");
     const duration = process.hrtime.bigint() - start; // calculate duration in nanoseconds
     const durationInMilliseconds = Number(duration) / 1e6; // convert duration to milliseconds
 
@@ -68,7 +69,7 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
   
-  console.log(err);
+  console.log("Error happen: " + err);
   res.status(500).send('Something broke!');
 });
 
@@ -85,7 +86,7 @@ process.on('uncaughtException', (err) => {
 app.get('/intensive', (req, res) => {
   // Call the CPU-intensive task function
   cpuIntensiveTask((result) => {
-    console.log(result);
+    console.log("Result: " + result);
     res.json({ method: req.method, message: "Running intensive CPU Task. Please wait...", ...req.body });
   });
 });
