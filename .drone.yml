@@ -64,7 +64,7 @@ steps:
 # export DRONE_SERVER=https://drone.bootcamp.onxp.net
 # export DRONE_TOKEN=your-drone-token
 # to build: drone build create --tag TAG_NAME REPO_NAME
-# example: drone build create --tag v1.0.0  onxpnet/exercise-app
+# example: drone build create --tag v1.0.0 onxpnet/exercise-app
 - name: build-tag
   image: plugins/kaniko
   settings:
@@ -75,10 +75,10 @@ steps:
     registry:
       from_secret: DOCKER_REGISTRY
     repo: glendmaatita/exercise-app
-    tags: ${DRONE_TAG}
+    tags: ${TAG_NAME}
   when:
     event:
-    - tag
+    - custom
 
 - name: notification
   image: appleboy/drone-discord
@@ -103,3 +103,4 @@ trigger:
   - push
   - tag
   - pull_request
+  - custom
