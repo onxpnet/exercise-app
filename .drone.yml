@@ -63,8 +63,8 @@ steps:
 # Authenticate the Drone CLI
 # export DRONE_SERVER=https://drone.bootcamp.onxp.net
 # export DRONE_TOKEN=your-drone-token
-# to build: drone build promote OWNER/REPO BUILD_NUMBER YOUR_TAG_NAME
-# example: drone build promote onxpnet/homepage 1 v1.0.0 
+# to build: drone build create --tag TAG_NAME REPO_NAME
+# example: drone build create --tag v1.0.0  onxpnet/exercise-app
 - name: build-tag
   image: plugins/kaniko
   settings:
@@ -78,7 +78,7 @@ steps:
     tags: ${DRONE_TAG}
   when:
     event:
-    - promote
+    - tag
 
 - name: notification
   image: appleboy/drone-discord
@@ -101,5 +101,5 @@ trigger:
   - main
   event:
   - push
-  - promote
+  - tag
   - pull_request
