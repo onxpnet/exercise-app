@@ -72,7 +72,7 @@ steps:
 # to build: drone build create --tag TAG_NAME REPO_NAME
 # example: drone build create --tag v1.0.0 onxpnet/exercise-app
 - name: build-tag
-  image: banzaicloud/drone-kaniko
+  image: plugins/kaniko
   settings:
     username:
       from_secret: DOCKER_USERNAME
@@ -82,7 +82,7 @@ steps:
       from_secret: DOCKER_REGISTRY
     repo: glendmaatita/exercise-app
     tags: 
-      - v.0.0.0
+      - ${TAG_NAME}
   when:
     event:
     - custom
