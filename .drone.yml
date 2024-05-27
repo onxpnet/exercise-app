@@ -21,7 +21,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     registry:
       from_secret: DOCKER_REGISTRY
-    repo: docker.io/glendmaatita/exercise-app
+    repo: glendmaatita/exercise-app
     tags: latest
   when:
     branch: 
@@ -74,7 +74,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     registry:
       from_secret: DOCKER_REGISTRY
-    repo: docker.io/glendmaatita/exercise-app
+    repo: glendmaatita/exercise-app
     tags: ${DRONE_TAG}
   when:
     event:
