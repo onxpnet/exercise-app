@@ -81,7 +81,7 @@ steps:
     registry:
       from_secret: DOCKER_REGISTRY
     repo: glendmaatita/exercise-app
-    tags: ${TAG_NAME}
+    tags: v.0.0.0
   when:
     event:
     - custom
