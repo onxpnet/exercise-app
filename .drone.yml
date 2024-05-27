@@ -78,7 +78,7 @@ steps:
     tags: ${TAG_NAME}
   when:
     event:
-    - custom
+    - refs/tags/**
 
 - name: notification
   image: appleboy/drone-discord
@@ -103,3 +103,4 @@ trigger:
   - push
   - tag
   - pull_request
+  - refs/tags/**
