@@ -47,6 +47,7 @@ jobs:
           tags: glendmaatita/exercise-app:${{ github.event.client_payload.tag }}
 
   notify:
+    needs: build
     if: always()
     runs-on: ubuntu-latest
     steps:
