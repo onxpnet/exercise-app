@@ -37,5 +37,7 @@ function isPrime(num) {
 }
 
 module.exports = {
-  cpuIntensiveTask
+  cpuIntensiveTask,
+  calculatePrimeNumbers,
+  isPrime
 };
