@@ -1,8 +1,8 @@
 # Triggered via
-# curl -X POST https://api.github.com/repos/onxpnet/exercise-app/dispatches \                               ✔ 
+# curl -X POST https://api.github.com/repos/onxpnet/exercise-app/dispatches \
 # -H 'Accept: application/vnd.github.everest-preview+json' \
 # -H "Authorization: token $GITHUB_TOKEN" \
-# --data '{"event_type": "build", "client_payload": {"tag": "v1.0.0"}}'
+# --data '{"event_type": "build", "client_payload": {"tag": "v1.0.1"}}'
 
 # access data from: ${{ github.event.client_payload.tag }}
 
@@ -47,7 +47,6 @@ jobs:
           tags: glendmaatita/exercise-app:${{ github.event.client_payload.tag }}
 
   notify:
-    needs: verify
     if: always()
     runs-on: ubuntu-latest
     steps:
