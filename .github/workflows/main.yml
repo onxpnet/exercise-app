@@ -55,8 +55,10 @@ jobs:
 
   notify:
     needs: verify
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Send notification to Discord
         run: |
-          curl -v -X POST "${{secrets.DISCORD_WEBHOOKS_URL}}" -H "Content-Type: application/json" -d "{\"content\": \"Build Exercise App on main has been finished.\", \"username\": \"github-bot\", \"avatar_url\": \"https://cdn.discordapp.com/attachments/892612412014997557/1226787592725463040/gitlab-logo-600.png?ex=662609fa&is=661394fa&hm=ab695f97e42f571d6d98dd5a9f9fa8db1c295fdf16290489b21430069443ce8b&\"}"
+          curl -v -X POST "${{secrets.DISCORD_WEBHOOKS_URL}}" -H "Content-Type: application/json" -d "{\"content\": \"Build Exercise App on main has been finished. Check this on https://github.com/onxpnet/exercise-app/actions/runs/${{ github.run_id }}\", \"username\": \"github-bot\", \"avatar_url\": \"https://cdn.discordapp.com/attachments/892612412014997557/1226787592725463040/gitlab-logo-600.png?ex=662609fa&is=661394fa&hm=ab695f97e42f571d6d98dd5a9f9fa8db1c295fdf16290489b21430069443ce8b&\"}"
+          
