@@ -7,6 +7,7 @@ on:
       - main
 
 jobs:
+  # build docker image and push to docker hub
   build:
     runs-on: ubuntu-latest
     steps:
@@ -21,8 +22,12 @@ jobs:
       - name: Install jest
         run: npm ci
 
+      # run unit test
       - name: Run test
         run: npx jest
+
+      # linting
+      # validate docs
 
       - name: login to Docker Hub
         uses: docker/login-action@v3
@@ -39,6 +44,7 @@ jobs:
           tags: glendmaatita/exercise-app:latest
   
   # More info: https://github.com/marketplace/actions/aqua-security-trivy
+  # DevSecOps: Perform vulnerability scanning
   verify:
     needs: build
     runs-on: ubuntu-latest
