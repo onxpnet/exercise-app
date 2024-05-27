@@ -21,7 +21,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     registry:
       from_secret: DOCKER_REGISTRY
-    repo: registry.bootcamp.onxp.net/onxp/exercise-app
+    repo: docker.io/glendmaatita/exercise-app
     tags: latest
   when:
     branch: 
@@ -47,7 +47,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     registry:
       from_secret: DOCKER_REGISTRY
-    repo: registry.bootcamp.onxp.net/onxp/exercise-app-docs
+    repo: docker.io/glendmaatita/exercise-app-docs
     tags: latest
     dockerfile: Dockerfile.docs
   when:
@@ -64,8 +64,8 @@ steps:
 # export DRONE_SERVER=https://drone.bootcamp.onxp.net
 # export DRONE_TOKEN=your-drone-token
 # to build: drone build promote OWNER/REPO BUILD_NUMBER YOUR_TAG_NAME
-# example: drone build promote onxpnet/homepage 1 1.0.0 
-- name: build-latest
+# example: drone build promote onxpnet/homepage 1 v1.0.0 
+- name: build-tag
   image: plugins/kaniko
   settings:
     username:
@@ -74,7 +74,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     registry:
       from_secret: DOCKER_REGISTRY
-    repo: registry.bootcamp.onxp.net/onxp/exercise-app
+    repo: docker.io/glendmaatita/exercise-app
     tags: ${DRONE_TAG}
   when:
     event:
@@ -88,12 +88,12 @@ steps:
     webhook_token:
       from_secret: DISCORD_WEBHOOK_TOKEN
     username: DroneCI
-    avatar_url: https://cdn.discordapp.com/attachments/892612412014997557/1226805651158601748/Microsoft.png?ex=66261acc&is=6613a5cc&hm=9e2b807b5f8fdc9b44c09f4fdcf6b6f969bbcdbb79c495bf3e5df5b41973bd48&
+    avatar_url: https://cdn.discordapp.com/attachments/892612412014997557/1226805651158601748/Microsoft.png?ex=665590cc&is=66543f4c&hm=caf63d12d5c5ba743970a88edde3ec0798b6cc599ff2570ba584326ad9502594&
     message: >
       {{#success build.status}}
-        Build **homepage** is *done*. Check on https://drone.bootcamp.onxp.net/onxpnet/homepage/{{build.number}} for more details.
+        Build **exercise-app** is *done*. Check on https://drone.bootcamp.onxp.net/onxpnet/exercise-app/{{build.number}} for more details.
       {{else}}
-        Build **homepage** is *failed*. Check on https://drone.bootcamp.onxp.net/onxpnet/homepage/{{build.number}} for more details.
+        Build **exercise-app** is *failed*. Check on https://drone.bootcamp.onxp.net/onxpnet/exercise-app/{{build.number}} for more details.
       {{/success}}
 
 trigger:
