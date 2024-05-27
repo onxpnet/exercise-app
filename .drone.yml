@@ -47,7 +47,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     registry:
       from_secret: DOCKER_REGISTRY
-    repo: docker.io/glendmaatita/exercise-app-docs
+    repo: glendmaatita/exercise-app-docs
     tags: latest
     dockerfile: Dockerfile.docs
   when:
