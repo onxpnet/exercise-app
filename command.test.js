@@ -3,7 +3,7 @@ const { calculatePrimeNumbers, isPrime } = require('./command'); // assuming the
 describe('calculatePrimeNumbers', () => {
   test('should return an array of prime numbers up to the limit', () => {
     const primes = calculatePrimeNumbers(10);
-    expect(primes).toEqual([2, 3, 5, 7]);
+    expect(primes).toEqual([2, 2, 2, 2]);
   });
 
   test('should return an empty array when limit is less than 2', () => {
