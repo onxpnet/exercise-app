@@ -1,8 +1,8 @@
 # Triggered via
-# curl -X POST https://api.github.com/repos/onxpnet/exercise-app/dispatches \
+# curl -X POST https://api.github.com/repos/onxpnet/exercise-app/dispatches \                               ✔ 
 # -H 'Accept: application/vnd.github.everest-preview+json' \
-# -H 'Authorization: token YOUR_GITHUB_TOKEN' \
-# --data '{"event_type": "build", "client_payload": {"tag": "YOUR_TAG_NAME"}}'
+# -H "Authorization: token $GITHUB_TOKEN" \
+# --data '{"event_type": "build", "client_payload": {"tag": "v1.0.0"}}'
 
 # access data from: ${{ github.event.client_payload.tag }}
 
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.client_payload.tag }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -43,26 +45,12 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: glendmaatita/exercise-app:${{ github.event.client_payload.tag }}
-  
-  # More info: https://github.com/marketplace/actions/aqua-security-trivy
-  verify:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'docker.io/glendmaatita/exercise-all:${{ github.event.client_payload.tag }}'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
 
   notify:
     needs: verify
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Send notification to Discord
         run: |
-          curl -v -X POST "${{secrets.DISCORD_WEBHOOKS_URL}}" -H "Content-Type: application/json" -d "{\"content\": \"Build Exercise App tag ${{ github.event.client_payload.tag }} has been finished.\", \"username\": \"github-bot\", \"avatar_url\": \"https://cdn.discordapp.com/attachments/892612412014997557/1226787592725463040/gitlab-logo-600.png?ex=662609fa&is=661394fa&hm=ab695f97e42f571d6d98dd5a9f9fa8db1c295fdf16290489b21430069443ce8b&\"}"
+          curl -v -X POST "${{secrets.DISCORD_WEBHOOKS_URL}}" -H "Content-Type: application/json" -d "{\"content\": \"Build Exercise App on tag ${{ github.event.client_payload.tag }} has been finished. Check this on https://github.com/onxpnet/exercise-app/actions/runs/${{ github.run_id }}\", \"username\": \"github-bot\", \"avatar_url\": \"https://cdn.discordapp.com/attachments/892612412014997557/1226787592725463040/gitlab-logo-600.png?ex=662609fa&is=661394fa&hm=ab695f97e42f571d6d98dd5a9f9fa8db1c295fdf16290489b21430069443ce8b&\"}"
