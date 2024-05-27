@@ -26,6 +26,8 @@ steps:
   when:
     branch: 
     - main
+    event: 
+    - push
 
 - name: sonarqube-analysis
   image: aosapps/drone-sonar-plugin
@@ -35,6 +37,8 @@ steps:
     sonar_token:
       from_secret: SONAR_TOKEN
   when:
+    branch: 
+    - main
     event: 
     - pull_request
 
@@ -53,6 +57,8 @@ steps:
   when:
     branch: 
     - main
+    event: 
+    - push
 
 # Build by tag
 # Need to install Drone Cli first
@@ -95,12 +101,3 @@ steps:
       {{else}}
         Build **exercise-app** is *failed*. Check on https://drone.bootcamp.onxp.net/onxpnet/exercise-app/{{build.number}} for more details.
       {{/success}}
-
-trigger:
-  branch:
-  - main
-  event:
-  - push
-  - tag
-  - pull_request
-  - custom
