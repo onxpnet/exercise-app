@@ -63,7 +63,7 @@ jobs:
   #         severity: 'CRITICAL,HIGH'
 
   notify:
-    needs: verify
+    needs: build
     if: always()
     runs-on: ubuntu-latest
     steps:
