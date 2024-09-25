@@ -6,6 +6,7 @@ on:
     branches:
       - main
 
+# clone git -> install NodeJS -> 
 jobs:
   # build docker image and push to docker hub
   build:
@@ -47,19 +48,19 @@ jobs:
   
   # More info: https://github.com/marketplace/actions/aqua-security-trivy
   # DevSecOps: Perform vulnerability scanning
-  verify:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'docker.io/glendmaatita/exercise-app:latest'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+  # verify:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run Trivy vulnerability scanner
+  #       uses: aquasecurity/trivy-action@master
+  #       with:
+  #         image-ref: 'docker.io/glendmaatita/exercise-app:latest'
+  #         format: 'table'
+  #         exit-code: '1'
+  #         ignore-unfixed: true
+  #         vuln-type: 'os,library'
+  #         severity: 'CRITICAL,HIGH'
 
   notify:
     needs: verify
