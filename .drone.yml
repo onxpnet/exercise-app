@@ -84,3 +84,4 @@ steps:
       {{else}}
         Build **exercise-app** is *failed*. Check on https://drone.bootcamp.onxp.net/onxpnet/exercise-app/{{build.number}} for more details.
       {{/success}}
+
