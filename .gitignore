@@ -4,3 +4,4 @@ logs/
 dump.rdb
 out/
 .DS_Store
+coverage/
