@@ -30,6 +30,12 @@ jobs:
       - name: Check coverage
         run: |
           COVERAGE=$(npx jest --coverage --coverageReporters=text-summary | grep 'All files' | awk '{print $4}' | sed 's/%//')
+          echo "Coverage: $COVERAGE%"
+          if [ -z "$COVERAGE" ]; then
+            echo "Coverage is not set. Exiting."
+            exit 1
+          fi
+          COVERAGE=${COVERAGE%.*}
           if [ "$COVERAGE" -lt 100 ]; then
             echo "Coverage is less than 100%. Exiting."
             exit 1
