@@ -31,7 +31,8 @@ jobs:
         run: |
           COVERAGE=$(npx jest --coverage | grep 'All files' | awk '{print $4}' | sed 's/%//')
           echo "Coverage: $COVERAGE%"
-          if [ "$COVERAGE" -lt 100 ]; then
+          COVERAGE_INT=$(printf "%.0f" "$COVERAGE")
+          if [ "$COVERAGE_INT" -lt 100 ]; then
             echo "Coverage is less than 100%. Exiting."
             exit 1
           fi
