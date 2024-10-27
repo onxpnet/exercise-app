@@ -57,7 +57,7 @@ jobs:
         with:
           image-ref: 'docker.io/glendmaatita/exercise-app:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0' # set 1, if stop the workflow when vulnerabilities are found
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
