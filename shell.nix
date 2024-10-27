@@ -1,0 +1,107 @@
+let
+  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-23.11";
+  pkgs = import nixpkgs { config = { allowUnfree = true; }; overlays = []; };
+
+  postgresql = pkgs.postgresql_15.overrideAttrs (oldAttrs: rec {
+    version = "15.4";
+  });
+
+  redis = pkgs.redis.overrideAttrs (oldAttrs: rec {
+    version = "7.2.4";
+  });
+  
+  lib = pkgs.lib;
+
+  stdenv = pkgs.stdenv;
+
+  basePackages = [
+    pkgs.cargo-tarpaulin
+    pkgs.libiconv
+    pkgs.postgresql
+    pkgs.pkg-config
+    pkgs.cmake
+    pkgs.openssl
+    pkgs.lld
+    pkgs.zld
+  ];
+  inputs = basePackages
+    ++ lib.optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
+        SystemConfiguration
+        Security
+      ]);
+in
+
+
+
+pkgs.mkShell {
+  packages = with pkgs; [
+    cargo
+    iconv
+    bun
+    postgresql
+    redis
+  ];
+
+  buildInputs = inputs;
+
+  shellHook = ''
+    export OPENSSL_ROOT_DIR=${pkgs.openssl.dev}
+    export OPENSSL_LIBRARIES=${pkgs.openssl.out}/lib
+    export OPENSSL_SSL_LIBRARY=${pkgs.openssl.out}/lib/libssl.so
+    export OPENSSL_CRYPTO_LIBRARY=${pkgs.openssl.out}/lib/libcrypto.so
+    export OPENSSL_INCLUDE_DIR=${pkgs.openssl.dev}/include
+    export NIX_SHELL_DIR=$PWD/.nix-shell
+    export LC_ALL=C
+    export LANG=C.utf8
+
+    export PGDATA=$NIX_SHELL_DIR/db
+    export PGHOST=localhost
+    export PGUSER=postgres
+    export PGPASSWORD=password
+
+    # Setup PostgreSQL
+    mkdir $NIX_SHELL_DIR
+    
+   trap \
+    "
+      pg_ctl -D $PGDATA stop
+      pkill redis-server
+      pkill core_actix
+    " \
+    EXIT
+
+    if ! test -d $PGDATA
+    then
+      initdb -D $PGDATA --no-locale --encoding=UTF8
+    fi
+
+    HOST_COMMON="host\s\+all\s\+all"
+    sed -i "s|^$HOST_COMMON.*127.*$|host all all 0.0.0.0/0 trust|" $PGDATA/pg_hba.conf
+    sed -i "s|^$HOST_COMMON.*::1.*$|host all all ::/0 trust|"      $PGDATA/pg_hba.conf
+
+    pg_ctl                                                  \
+      -D $PGDATA                                            \
+      -l $PGDATA/postgres.log                               \
+      -o "-c unix_socket_directories='$PGDATA'"             \
+      -o "-c listen_addresses='*'"                          \
+      -o "-c log_destination='stderr'"                      \
+      -o "-c logging_collector=on"                          \
+      -o "-c log_directory='log'"                           \
+      -o "-c log_filename='postgresql-%Y-%m-%d_%H%M%S.log'" \
+      -o "-c log_min_messages=info"                         \
+      -o "-c log_min_error_statement=info"                  \
+      -o "-c log_connections=on"                            \
+      start
+
+    echo "Setup database.. To access DB: psql -U $PGUSER -d postgres"
+    if ! psql -U $(whoami) -tAc "SELECT 1 FROM pg_database WHERE datname='retro_development'" | grep -q 1; then
+      createuser -U $(whoami)
+      psql -U $(whoami) -d postgres -c "CREATE DATABASE $(whoami) OWNER $(whoami);" || true
+      psql -U $(whoami) -d postgres -c "ALTER ROLE $PGUSER SUPERUSER;"
+      psql -U "$PGUSER" -d postgres -c "CREATE DATABASE retro_development" || true
+    fi
+
+    echo "Run redis.. See log on $NIX_SHELL_DIR/redis.log"
+    nohup redis-server > $NIX_SHELL_DIR/redis.log 2>&1 &
+  '';
+}
