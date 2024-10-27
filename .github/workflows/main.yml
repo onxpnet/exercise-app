@@ -36,6 +36,13 @@ jobs:
             echo "Coverage is less than 100%. Exiting."
             exit 0 # set 1 to fail the build
           fi
+      
+      # check sonarqube
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       # linting
       # validate docs
@@ -53,6 +60,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: glendmaatita/exercise-app:latest
+
   
   # More info: https://github.com/marketplace/actions/aqua-security-trivy
   # DevSecOps: Perform vulnerability scanning
