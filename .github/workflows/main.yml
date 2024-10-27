@@ -25,9 +25,15 @@ jobs:
 
       # run unit test
       - name: Run test
-        run: npx jest
+        run: npx jest --coverage
 
-      # coverage tests: > 90%
+      - name: Check coverage
+        run: |
+          COVERAGE=$(npx jest --coverage --coverageReporters=text-summary | grep 'All files' | awk '{print $4}' | sed 's/%//')
+          if [ "$COVERAGE" -lt 100 ]; then
+            echo "Coverage is less than 100%. Exiting."
+            exit 1
+          fi
 
       # linting
       # validate docs
