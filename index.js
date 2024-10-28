@@ -35,8 +35,6 @@ const unleash = startUnleash({
   appName: 'exercise-app',
   customHeaders: { Authorization: process.env.UNLEASH_TOKEN || '' },
 });
-unleash.on('ready', console.log.bind(console, 'ready'));
-unleash.on('error', console.error);
 
 app.use((req, res, next) => {
   console.log('Catch all requests');
