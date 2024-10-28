@@ -9,51 +9,17 @@ let
   redis = pkgs.redis.overrideAttrs (oldAttrs: rec {
     version = "7.2.4";
   });
-  
-  lib = pkgs.lib;
-
-  stdenv = pkgs.stdenv;
-
-  basePackages = [
-    pkgs.cargo-tarpaulin
-    pkgs.libiconv
-    pkgs.postgresql
-    pkgs.pkg-config
-    pkgs.cmake
-    pkgs.openssl
-    pkgs.lld
-    pkgs.zld
-  ];
-  inputs = basePackages
-    ++ lib.optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
-        SystemConfiguration
-        Security
-      ]);
 in
-
-
 
 pkgs.mkShell {
   packages = with pkgs; [
-    cargo
-    iconv
-    bun
     postgresql
     redis
   ];
 
-  buildInputs = inputs;
-
   shellHook = ''
-    export OPENSSL_ROOT_DIR=${pkgs.openssl.dev}
-    export OPENSSL_LIBRARIES=${pkgs.openssl.out}/lib
-    export OPENSSL_SSL_LIBRARY=${pkgs.openssl.out}/lib/libssl.so
-    export OPENSSL_CRYPTO_LIBRARY=${pkgs.openssl.out}/lib/libcrypto.so
-    export OPENSSL_INCLUDE_DIR=${pkgs.openssl.dev}/include
     export NIX_SHELL_DIR=$PWD/.nix-shell
-    export LC_ALL=C
-    export LANG=C.utf8
-
+    
     export PGDATA=$NIX_SHELL_DIR/db
     export PGHOST=localhost
     export PGUSER=postgres
