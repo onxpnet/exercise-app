@@ -3,7 +3,7 @@ const cors = require('cors');
 const { cpuIntensiveTask } = require('./command');
 const { logger } = require('./logger');
 const Sentry = require('@sentry/node');
-const { startUnleash } = require('unleash-client');
+const { initialize } = require('unleash-client');
 
 require('@opentelemetry/api');
 
@@ -30,11 +30,14 @@ Sentry.init({
 });
 
 // init unleash
-const unleash = startUnleash({
+const unleash = initialize({
   url: process.env.UNLEASH_URL || 'http://unleash:4242/api/',
   appName: 'exercise-app',
   customHeaders: { Authorization: process.env.UNLEASH_TOKEN || '' },
 });
+
+unleash.on('ready', console.log.bind(console, 'ready'));
+unleash.on('error', console.error);
 
 app.use((req, res, next) => {
   console.log('Catch all requests');
