@@ -3,16 +3,14 @@ const cors = require('cors');
 const { cpuIntensiveTask } = require('./command');
 const { logger } = require('./logger');
 const Sentry = require('@sentry/node');
-import { startUnleash } from 'unleash-client';
+const { startUnleash } = require('unleash-client');
 
 require('@opentelemetry/api');
 
 const { reqCounter, reqDuration } = require('./metrics');
-
 const app = express();
 
 app.use(cors());
-
 
 app.all('/', (req, res) => {
   res.json({ method: req.method, message: 'Hello Exercise App', ...req.body });
