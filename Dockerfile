@@ -1,11 +1,14 @@
+# base
 FROM --platform=linux/x86_64 node:20.9.0-bullseye-slim as base
 WORKDIR /opt/app
 
+# builder
 FROM --platform=linux/x86_64 base as builder
 WORKDIR /opt/app
 COPY package.json package-lock.json ./
 RUN npm install
 
+# runner
 FROM --platform=linux/x86_64 base as runner
 WORKDIR /opt/app
 COPY . .
