@@ -1,5 +1,4 @@
 # base step to install dependencies
-# base step for docker
 FROM --platform=linux/x86_64 node:20.9.0-bullseye-slim as base
 WORKDIR /opt/app
 
