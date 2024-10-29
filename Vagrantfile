@@ -1,5 +1,5 @@
 # vagrant up --provider=docker
-# using docker
+# using docker, no VM
 Vagrant.configure("2") do |config|
   config.vm.define "postgresql" do |pg|
     pg.vm.provider "docker" do |d|
